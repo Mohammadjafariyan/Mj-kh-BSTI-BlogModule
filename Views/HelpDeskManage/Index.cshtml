@@ -1,0 +1,35 @@
+﻿@using AbstractLibrary.Model
+@using AbstractLibrary.ViewComponents
+@using SignalRMVCChat.Models.HelpDesk
+@model BigPardakht.Model.MyDataTableResponse<SignalRMVCChat.Models.HelpDesk.HelpDesk>
+
+@{
+    ViewBag.Title = "لیست مرکز پشتیبانی های تعریف شده";
+    Layout = "_Layout_Blog";
+}
+
+<h2>لیست مرکز پشتیبانی های تعریف شده</h2>
+
+
+@{
+    Func<dynamic, string> func = s =>
+        s.Language != null ?
+            $@"<a target=""_blank"" href=""/HelpDesk/Index?lang={s.Language.Code}"">مشاهده</a>"
+            : $@"<a target=""_blank"" href=""/HelpDesk/Index?id={s.Id}"">مشاهده</a>"
+        ;
+}
+
+
+@(await Component.InvokeAsync<TableViewComponent>(new TableVCModel
+{
+    table = Model,
+    entity= new HelpDesk(),
+    actionPart = func
+}))
+
+
+
+@section scripts
+{
+
+}

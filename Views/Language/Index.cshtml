@@ -1,0 +1,28 @@
+﻿@using AbstractLibrary.Model
+@using AbstractLibrary.ViewComponents
+@using SignalRMVCChat.Models.HelpDesk
+@model BigPardakht.Model.MyDataTableResponse<SignalRMVCChat.Models.HelpDesk.Language>
+
+@{
+    ViewBag.Title = "لیست زبان های مرکز پشتیبانی";
+    Layout = "_Layout_Blog";
+}
+
+<h2>لیست زبان های مرکز پشتیبانی</h2>
+
+
+
+
+@(await Component.InvokeAsync<TableViewComponent>(new TableVCModel
+    {
+        table = Model,
+        entity = new Language()
+    }))
+    
+    
+    
+    
+@section scripts
+{
+    
+}

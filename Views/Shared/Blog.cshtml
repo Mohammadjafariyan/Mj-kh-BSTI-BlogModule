@@ -1,0 +1,57 @@
+﻿
+@model SignalRMVCChat.Models.weblog.Blog
+
+
+
+
+<link href="/_content/BlogModule/Quill/Quill.css" rel="stylesheet"/>
+
+@*
+<style>
+    .rtl *{
+    text-align: right;
+    }
+</style>*@
+@{
+    ViewData["Title"] =Model.Title ;
+}
+   
+    <h1>@ViewData["Title"]</h1>
+
+    <!------------------------------------------
+    HEADER
+    ------------------------------------------->
+    <div class="jumbotron jumbotron-lg jumbotron-fluid mb-3 bg-primary position-relative">
+        <div class="container text-white h-100 tofront">
+            <div class="row align-items-center justify-content-center text-center">
+                <div class="col-md-10">
+                    <h1 class="display-3">@ViewData["Title"]</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Header -->
+
+
+    <!-- Main -->
+    <div class="container pt-5 pb-5" data-aos="fade-up">
+        <div class="row justify-content-center" style="text-align: center">
+            <div class="col-md-8">
+                <article>
+                    <h1><strong>@ViewData["Title"]</strong> @Model.Category</h1>
+            
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- End Main -->
+
+    <!------------------------------------------
+    NEWSLETTER
+    ------------------------------------------->
+    <div class="container pt-4 pb-5 mb-5 rtl ql-editor" data-aos="fade-down">
+        
+        @Html.Raw(Model.Content)
+    </div>
+    <!-- End Newsletter -->
+}

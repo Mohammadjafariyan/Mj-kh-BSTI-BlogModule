@@ -1,0 +1,54 @@
+﻿@model SignalRMVCChat.Models.HelpDesk.Category
+@using AbstractLibrary.ViewComponents
+@using BigPardakht.Model
+@using SignalRMVCChat.Models.weblog
+
+
+
+@inject BigPardakht.Data.ApplicationDbContext ApplicationDbContext
+
+@{
+    ViewBag.Title = "ویرایشگر صفحات سایت";
+
+    Layout = "_Layout_Blog";
+
+
+
+}
+
+<link href="/_content/BlogModule/Quill/Quill.css" rel="stylesheet"/>
+<link href="/_content/BlogModule/Quill/Highlight.css" rel="stylesheet"/>
+
+
+<a style="float:left;margin-left:50px" href="/Editor/index">بازگشت به لیست</a>
+<form style="padding: 50px" method="post">
+    @(await Component.InvokeAsync<FormBuilderViewComponent>(Model))
+
+    @*@Html.ValidationSummary()
+
+    @Html.HiddenFor(f => f.Id)
+
+    @Html.Input("عنوان", nameof(@Model.Title), Model.Title)
+
+
+
+    @Html.Select("مرکز پشتیبانی",
+        nameof(@Model.HelpDeskId),
+        Model.HelpDeskId,
+        new SelectList(BlogContext.HelpDesks, "Id", "HeaderText",
+            Model.HelpDeskId ))*@
+
+
+    <div class="form-group">
+
+        <button class="btn btn-info">ذخیره</button>
+    </div>
+
+
+</form>
+
+
+@section scripts{
+
+
+}

@@ -1,0 +1,28 @@
+﻿@using AbstractLibrary.ViewComponents
+@model SignalRMVCChat.Models.HelpDesk.Article
+
+@{
+    ViewBag.Title = "ثبت مقاله جدید";
+    Layout = "_Layout_Blog";
+}
+
+<h2>ثبت مقاله جدید</h2>
+
+
+
+<form action="/Article/Save" method="post" >
+
+    @(await Component.InvokeAsync<FormBuilderViewComponent>(Model))
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">ارسال</button>
+    </div>
+
+</form>
+
+
+
+@section scripts
+{
+    
+}

@@ -1,0 +1,29 @@
+﻿@using AbstractLibrary.ViewComponents
+@model SignalRMVCChat.Models.HelpDesk.Language
+
+@{
+    ViewBag.Title = "ثبت زبان";
+    Layout = "_Layout_Blog";
+}
+
+<h2>ثبت زبان</h2>
+
+
+
+<form action="/Language/Save" method="post" >
+
+    @(await Component.InvokeAsync<FormBuilderViewComponent>(Model))
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">ارسال</button>
+    </div>
+
+</form>
+
+
+
+
+@section scripts
+{
+    
+}

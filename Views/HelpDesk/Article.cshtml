@@ -1,0 +1,389 @@
+﻿@using SignalRMVCChat.Models.HelpDesk
+@model SignalRMVCChat.Service.HelpDesk.ArticleViewModel
+
+
+
+
+@{
+    HelpDesk helpDesk = new HelpDesk
+    {
+        Name = "مرکز پشتیبانی",
+    };
+    if (ViewBag.helpDesk != null)
+    {
+        helpDesk = ViewBag.helpDesk as HelpDesk;
+    }
+
+    if (helpDesk == null)
+    {
+        helpDesk = new HelpDesk
+        {
+            Name = "مرکز پشتیبانی",
+            BgColor = "blue"
+
+        };
+    }
+}
+
+@{
+    ViewBag.Title = helpDesk.Name + "-" + Model.Article.Title;
+    Layout = "_HelpDesk_Layout";
+}
+
+<style>
+
+
+    .visibilityUnset {
+        display: unset;
+    }
+
+    .visibilityHidden {
+        display: none;
+    }
+
+    .keywords {
+        height: 50px;
+        overflow: auto;
+    }
+
+    .hiddenKeyword {
+        margin: 2px
+    }
+
+    .cat a {
+        font-size: 13px !important;
+    }
+
+    .card-text h5 {
+        font-size: 18px !important;
+    }
+
+    .card-text p {
+        font-size: 13px !important;
+    }
+
+    .cat li {
+        font-size: 13.5px;
+        line-height: 18px;
+        letter-spacing: .4px;
+        padding: 5px 0;
+    }
+
+    .cat a {
+        color: #141414;
+    }
+
+    .popularity-text {
+        padding: 5px;
+    }
+
+    .popularity {
+        border-left: 1px solid #dddfe2;
+    }
+
+    .popularity-bulbs {
+        display: flex;
+        padding: 5px;
+    }
+
+    .text {
+        display: flex;
+        line-height: 1.5em;
+        height: 3em;
+        overflow: hidden;
+        padding-left: 10px;
+    }
+
+    .popularity-bulb-single {
+        background-color: blue;
+        width: 3px;
+        height: 20px;
+        margin: 2px;
+    }
+
+    .card * {
+        direction: rtl;
+        text-align: right
+    }
+
+    .card h3, .card h2, .card h1, .card h5, .card h4, .card h6 {
+        border-right: 5px solid blue;
+        padding-right: 8px;
+        padding-top: 2px;
+    }
+
+    .card {
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="container-fluid " style=" background-color: white;padding: 20px">
+
+
+    <div class="container">
+
+        <div class="row">
+
+
+            <div class="col">
+
+
+                <a href="/HelpDesk/Index?websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]" class="btn btn-light">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    بازگشت
+                </a>
+
+            </div>
+
+            <div class="col" style="border-right: 2px solid #d3d7dd;padding-top: 7px">
+
+                <h6>
+                    @Model.Article.Title
+                </h6>
+
+            </div>
+            <div class="col-md-4">
+                <a href="/HelpDesk/Detail?categoryTitle=@Model.Article.Category.Name&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]" class="btn btn-primary">@Model.Article.Category.Name</a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+    <div class="row" style="margin-top: 50px">
+
+        <div class="col-md-10">
+
+            <div class="card" style="color: black;">
+                <div class="card-body">
+                    <div class="card-text" style="overflow:auto">
+                        @Html.Raw(Model.Article?.Content ?? "<p></p>")
+
+
+
+                        <hr />
+
+
+                        <div class="keywords">
+                            @if (string.IsNullOrEmpty(Model.Article.Keywords) == false)
+                            {
+                                var split = Model.Article.Keywords.Split(',');
+                                int c = 0;
+                                foreach (var key in split)
+                                {
+                                    if (string.IsNullOrEmpty(key))
+                                    {
+                                        continue;
+                                    }
+                                    c++;
+                                    if (c < 20)
+                                    {
+                                        <a href="/HelpDesk/Search?searchTerm=@key&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]" class="btn btn-info">
+                                            @key
+                                        </a>
+                                    }
+                                    else if (c == 20)
+                                    {
+                                        <a style="color:#00b1ff;cursor:pointer" onclick="toggleKeyWords()">
+                                            ادامه کلمات کلیدی
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/HelpDesk/Search?searchTerm=@key&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]"
+                                           class="btn btn-info hiddenKeyword visibilityHidden">
+                                            @key
+                                        </a>
+                                    }
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row justify-content-md-center">
+                <div class="justify-content-md-center ">
+                    <div style="text-align: center;">
+                        <p>  <b>آیا این مقاله مفید بود؟</b></p>
+
+                        <div>
+                            <button onclick="setIsHelpful(true)" data-toggle="modal" data-target="#exampleModal"
+                                    type="button" class="btn btn-secondary">
+                                بله
+                            </button>
+                            <button onclick="setIsHelpful(false)" data-toggle="modal" data-target="#exampleModal"
+                                    type="button" class="btn btn-secondary">
+                                خیر
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-2" style="text-align: right;
+        border-left: 2px solid #dddfe2">
+
+            <h5 style="padding-bottom: 10px">
+                <b>مقالات مرتبط</b>
+            </h5>
+            <ul class="cat" style="text-decoration: none;list-style-type: none;">
+
+                @foreach (var rel in Model.RelatedArticles)
+                {
+
+                    <li>
+                        <a href="/HelpDesk/Article?title=@rel.Title&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]" data-active="true" class="csh-aside-single-line csh-font-sans-bold">
+                            <b>@rel.Title</b>
+                        </a>
+                    </li>
+                }
+            </ul>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+@*------------------------ راضی--------------------------  *@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    ارسال بازخورد
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <h3 style="text-align: center;color: #@helpDesk.BgColor" id="callbackMsg"></h3>
+                <textarea id="text" placeholder="بگید در مورد این مقاله چی فکر می کنید ؟
+" style="width: 100%;height: 100%;border: none;direction: rtl;text-align: right" class="form-control"></textarea>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <button onclick="sendFeedback()" type="button" class="btn btn-primary" id="send">ارسال بازخورد من</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*------------------------ END--------------------------  *@
+
+
+
+<script>
+
+    function setIsHelpful(IsHelpful) {
+
+        window['IsHelpful'] = IsHelpful;
+    }
+
+function sendFeedback(){
+
+    let text=$('#text').val();
+    let IsHelpful = window['IsHelpful'];
+
+    let customerToken = CurrentUserInfo && CurrentUserInfo.customerToken ? CurrentUserInfo.customerToken: '';
+
+    fetch('/HelpDesk/SendFeedback', {
+                method: "POST", headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                                                 text: text,
+                                                 websiteBaseUrl:'@TempData["websiteBaseUrl"]',
+                                                 lang:'@TempData["lang"]',
+                    title: '@Model.Article.Title',
+                    IsHelpful: IsHelpful,
+                    customerToken: customerToken
+                                             },),
+                // -- or --
+                // body : JSON.stringify({
+                // user : document.getElementById('user').value,
+                // ...
+                // })
+            }).then(
+              response => response.text() // .json(), etc.
+              // same as function(response) {return response.text();}
+          ).then(
+           response => {
+
+               $('#callbackMsg').text("باتشکر بازخورد شما دریافت شد")
+               $('#text').hide()
+
+               $('#send').hide();
+
+                  //$('#exampleModal').modal('toggle');
+
+               }// .json(), etc.
+           // same as function(response) {return response.text();}
+       ).catch(function (err){
+
+               $('#submitButton button').prop('disabled', false);
+
+            $('#callbackMsg').text("باتشکر بازخورد شما دریافت شد")
+            console.error(err);
+                    //   showError('خطایی رخ داد' + err.responseText);
+           })
+
+/*      $.ajax({
+        url: '/HelpDesk/SendFeedback',
+        data: {
+            text: text,
+            websiteBaseUrl:'@TempData["websiteBaseUrl"]',
+            lang:'@TempData["lang"]',
+            title:'@Model.Article.Title'
+        },
+        method: 'post',
+        success: function (res) {
+
+            showSuccess("باتشکر بازخورد شما دریافت شد");
+        },
+        error: function (err) {
+            $('#submitButton button').prop('disabled', false);
+
+            console.error(err);
+            showError('خطایی رخ داد' + err.responseText);
+        }
+
+    })*/
+
+    }
+
+    function toggleKeyWords() {
+        $('.hiddenKeyword').toggleClass('visibilityHidden');
+
+    }
+</script>
+
+
+
+
+
+
+@section scripts
+{
+    
+}

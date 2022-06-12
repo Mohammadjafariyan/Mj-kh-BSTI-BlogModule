@@ -1,0 +1,30 @@
+﻿@using AbstractLibrary.Model
+@using AbstractLibrary.ViewComponents
+@using SignalRMVCChat.Models.HelpDesk
+@model BigPardakht.Model.MyDataTableResponse<SignalRMVCChat.Models.HelpDesk.Article>
+
+@{
+    ViewBag.Title = "لیست مقالات";
+    Layout = "_Layout_Blog";
+}
+
+<h2>لیست مقالات</h2>
+
+
+
+
+
+
+
+@(await Component.InvokeAsync<TableViewComponent>(new
+   TableVCModel {
+        table = Model,
+       entity = new Article()
+    }))
+    
+    
+    
+@section scripts
+{
+    
+}

@@ -1,0 +1,29 @@
+﻿
+@using System.Net.Http
+@using AbstractLibrary.Model
+@using AbstractLibrary.ViewComponents
+@using BigPardakht.Model
+@using Microsoft.EntityFrameworkCore
+@using SignalRMVCChat.Models.HelpDesk
+
+@model MyDataTableResponse<SignalRMVCChat.Models.HelpDesk.Category>
+
+@{
+    ViewBag.Title = "لیست دسته بندی های صفحات ";
+    Layout = "_Layout_Blog";
+} 
+
+
+
+
+
+@(await Component.InvokeAsync<TableViewComponent>(new 
+    TableVCModel{ 
+        table = Model,
+        entity = new Category()
+    }))
+    
+@section scripts
+{
+    
+}

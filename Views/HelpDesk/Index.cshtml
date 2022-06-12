@@ -1,0 +1,160 @@
+﻿@using SignalRMVCChat.Models.HelpDesk
+@model SignalRMVCChat.Service.HelpDesk.HelpDeskHomeViewModel
+
+@{
+    ViewBag.Title = "مرکز پشتیبانی";
+    Layout = "_HelpDesk_Layout";
+    
+    
+    ViewBag.helpDesk  = Model.HelpDesk;
+    ViewBag.Languages= Model.Languages;
+}
+
+
+
+@{
+    HelpDesk helpDesk = new HelpDesk
+    {
+        Name = "مرکز پشتیبانی",
+    };
+    if (ViewBag.helpDesk!=null)
+    {
+        helpDesk=ViewBag.helpDesk as HelpDesk;
+    }
+
+    if (helpDesk==null)
+    {
+        helpDesk = new HelpDesk
+        {
+            Name = "مرکز پشتیبانی",
+            BgColor = "blue"
+
+        };
+    }
+}
+
+<style>
+    .header-color{
+        
+    }
+    
+    h4{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
+    
+    .acard{
+     margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .card {text-align: center;
+    
+    }
+    
+    .acard img{
+    margin-left: 16%;
+    }
+</style>
+
+<div >
+    
+   
+    
+    <div class="container" style="background-color: #f5f8fb">
+        
+        <div class="container">
+        
+            <h4 > <b>
+                <i class="fas fa-bookmark" aria-hidden="true"></i>
+
+                مقالات پر بازدید
+            </b></h4>
+            <div class="row justify-content-md-center">
+                <div class="col-md-8">
+                    <div class="row justify-content-md-center">
+                        @if (Model.Articles != null)
+                        {
+                            for (int i = 0; i < Model.Articles?.Count; i++)
+                            {
+                                <div class="col-md-4 acard">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p style="background-color: #f5f8fb" class="card-text">
+                                                <a href="/HelpDesk/Article?title=@Model.Articles[i].Title&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]" style="background-color: #f5f8fb;color: black">
+                                                    @Model.Articles[i].Title
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            }
+                        }
+                    
+                    </div>
+                </div>
+
+            </div>
+           
+            <h4><b>
+                <i class="fas fa-book" aria-hidden="true"></i>
+
+                گشتن در دسته بندی ها
+
+
+            </b></h4>
+            <div class="row justify-content-md-center">
+                <div class="col-md-8">
+                    <div class="row justify-content-md-center">
+                        @if (Model.Categories != null)
+                        {
+                            for (int i = 0; i < Model.Categories?.Count; i++)
+                            {
+
+                                var img= Model.Categories[i].Files?.FirstOrDefault();
+                                <div class="col-md-4 acard">
+                                    <div class="card">
+
+                                        <img class="card-img-top" style="width:  150px"
+                                             src="/File/ById?fileId=@img" alt="@Model.Categories[i].Name">
+
+                                        <div class="card-body">
+                                            <a href="/HelpDesk/Detail?categoryTitle=@Model.Categories[i].Name&websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@TempData["lang"]"
+                                               class="btn text-white" style="background-color: @Model.Categories[i].BgColor">@Model.Categories[i].Name</a>
+                                            <p style="margin-top: 11px;" class="card-text">@Model.Categories[i].Description</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        }
+
+
+                    </div>
+                </div>
+
+            </div>
+            
+            
+            
+          
+
+        </div>
+              
+    </div>
+     
+</div>
+
+
+
+
+
+
+
+
+@section scripts
+{
+    
+}

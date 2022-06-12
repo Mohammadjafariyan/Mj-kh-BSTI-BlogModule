@@ -1,0 +1,114 @@
+﻿@using BigPardakht.Model
+@using Microsoft.AspNetCore.Http
+@using SignalRMVCChat.Models.HelpDesk
+@model dynamic
+
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+  var currentUrl = HttpContextAccessor.HttpContext.Request.Path + HttpContextAccessor.HttpContext.Request.QueryString;
+}
+@{
+
+  HelpDesk helpDesk = new HelpDesk
+  {
+    Name = "مرکز پشتیبانی"
+  };
+  if (ViewBag.helpDesk!=null)
+  {
+    helpDesk=ViewBag.helpDesk as HelpDesk;
+  }
+
+  if (helpDesk==null)
+  {
+    helpDesk = new HelpDesk
+    {
+      Name = "مرکز پشتیبانی"
+    };
+  }
+
+  List<Language> languages = new List<Language>();
+  if (ViewBag.Languages !=null)
+  {
+    languages=ViewBag.Languages as List<Language>;
+  }
+  if (languages==null)
+  {
+    languages = new List<Language>();
+  }
+
+  Language selectedLanguage = languages?.Where(l => l.Id == helpDesk?.LanguageId).FirstOrDefault();
+
+  if (selectedLanguage==null)
+  {
+    selectedLanguage=new Language
+    {
+      nativeName = "زبان"
+    };
+  }
+  
+  string primary = "btn-primary";
+  string color = "white";
+  if (string.IsNullOrEmpty(helpDesk.BgColor)==false)
+  {
+    primary = "";
+    color = MyGlobal.ContrastColor(helpDesk.BgColor).Name;
+  }
+}
+
+
+
+<div class="row justify-content-center" style="margin-top: 10px;">
+  <div class="col-md-6">
+    <a class="nav-link text-white" style="font-size: 25px !important;" href="@currentUrl">
+      @helpDesk.Name
+      |
+      <i class="fas fa-leaf" aria-hidden="true"></i>
+
+    </a>
+  </div>
+
+  <div class="col-md-4 nav-item text-white">
+    <div class="row">
+      <div class="dropdown">
+        <a class="btn  nav-link @primary  dropdown-toggle " id="dropdownMenuButton" data-toggle="dropdown"
+           
+           
+           aria-haspopup="true" aria-expanded="false" href="#" style="font-size: 16px !important;background-color: @helpDesk.BgColor;color: @color">
+
+          Eng|@selectedLanguage.nativeName
+          <i class="fas fa-language" aria-hidden="true"></i>
+
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          
+          @foreach (var l in languages)
+          {
+
+            <a  class="dropdown-item" href="/HelpDesk/Index?websiteBaseUrl=@TempData["websiteBaseUrl"]&lang=@l.Code">@l.Name</a>
+          }
+        </div>
+      </div>
+      
+      @if (string.IsNullOrEmpty(currentUrl))
+      {
+        currentUrl = "/";
+      }
+      
+      <a class="btn @primary nav-link " href="@currentUrl" target="_blank" style="font-size: 16px !important;background-color: @helpDesk.BgColor;color: @color">
+
+        بروبه وبسایت
+        <i class="fas fa-rocket" aria-hidden="true"></i>
+
+
+      </a>
+    </div>
+
+
+  </div>
+
+
+</div>
+
+

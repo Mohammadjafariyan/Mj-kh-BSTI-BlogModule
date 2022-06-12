@@ -1,0 +1,138 @@
+﻿          @model SignalRMVCChat.Models.weblog.Blog
+      @using SignalRMVCChat.Models.weblog    
+
+       
+          
+          @inject BigPardakht.Data.ApplicationDbContext ApplicationDbContext
+       
+          @{
+           ViewBag.Title = "ویرایشگر صفحات سایت";
+       
+                Layout = "_Layout_Blog";
+       
+       }
+       
+       <link href="/_content/BlogModule/Quill/Quill.css" rel="stylesheet" />
+       <link href="/_content/BlogModule/Quill/Highlight.css" rel="stylesheet" />
+       
+       
+       
+       <a style="float:left;margin-left:50px" href="/Editor/index">بازگشت به لیست</a>
+       <div style="padding: 50px">
+       
+           <div class="form-group">
+               
+               
+               <label>عنوان</label>
+               <input name="" id="titleTemp" value="@Model.Title" class="form-control" />
+           </div>
+           
+           
+           
+       
+       
+           <div class="form-group">
+               @{
+                   int type = (int)@Model.Type;
+               }
+       
+       
+       @Html.DropDownList("Type", 
+           Html.GetEnumSelectList<BlogType>(),
+           "انتخاب صفحه",new { @class = "form-control",@id = "type" })
+       
+       
+               <br/>
+               <small style="color:orange">در صورت تعریف بیش از یک مطلب برای یک صفحه ، تمامی صفحات نمایش داده خواهند شد</small>
+           </div>
+     
+           
+           <div class="form-group">
+              
+                             @{
+                                 var selectlist= new SelectList(ApplicationDbContext.Categories.ToList(), "Id", "Name", Model.CategoryId);
+                             }
+                             @Html.DropDownListFor(b=>b.CategoryId,selectlist
+                                  ,"دسته بندی", new
+                                 {
+                                     @class="form-control"
+                                 } )
+           </div>
+       
+           <div class="form-group">
+       
+               <div id="editor" style="height:350px">
+       
+                  @Html.Raw(Model.Content)
+               </div>
+           </div>
+       
+       
+           <div class="form-group">
+       
+               <button class="btn btn-info" onclick="Save()">ذخیره</button>
+           </div>
+       
+       
+       
+       
+       
+       </div>
+       
+       <form style="display:none" id="myfo" method="post" action="/Editor/Save">
+           <input name="Title" id="Title" value="@Model.Title" />
+           <input name="Type" id="Type" value="" />
+           <input name="Id" id="Id" value="@Model.Id" />
+           <input name="Content" id="Content" value="@Model.Content" />
+           <input name="CategoryId" id="_CategoryId" value="@Model.CategoryId" />
+       
+       
+           <input type="submit" />
+       </form>
+       
+       @section scripts{
+       
+           <script src="/_content/BlogModule/Quill/Highlight.js" type="text/javascript"></script>
+           <script src="/_content/BlogModule/Quill/Quill.js" type="text/javascript"></script>
+           <script>
+               var quill = new Quill('#editor', {
+                   bounds: '#editor',
+                   modules: {
+                       'syntax': true,
+                       'toolbar': [
+                           ['bold', 'italic', 'underline', 'strike'],
+                           [{ 'color': [] }, { 'background': [] }],
+                           [{ 'script': 'super' }, { 'script': 'sub' }],
+                           [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                           [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                           [{ 'direction': 'rtl' }, { 'align': [] }],
+                           ['link', 'image', 'video', 'formula'],
+                           ['clean']
+                       ],
+                   },
+                   theme: 'snow'
+               });
+       
+               function Save() {
+       
+                   $('#Title').val($('#titleTemp').val())
+                   $('#Type').val($('#type').val())
+                   
+                   
+                   
+                   
+                   
+                   $('#_CategoryId').val($('select[name="CategoryId"]').val())
+                   $('#Content').val(quill.root.innerHTML)
+       
+                   console.log('typpppppppppppppe', $('#myfo').serialize())
+       
+                   debugger;
+                   $('#myfo').submit();
+               }
+           </script>
+       
+       
+       }
+
+

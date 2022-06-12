@@ -1,0 +1,29 @@
+﻿@using System.Linq
+
+@model SignalRMVCChat.Models.weblog.BlogType
+
+
+@inject BigPardakht.Data.ApplicationDbContext ApplicationDbContext
+@{
+    
+    
+    var list = ApplicationDbContext.Blogs.Where(b=>b.Type==Model).ToList();
+
+}
+
+@if (!list.Any())
+{
+    
+    @await  Html.PartialAsync("Blog_Sample")
+}
+else
+{
+
+    foreach (var blog in list)
+    {
+        @await  Html.PartialAsync("Blog",blog)
+    }
+}
+
+
+
